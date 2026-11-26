@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { BrandLogo } from '@/components/ui/BrandLogo';
 import { useApp } from '@/lib/context/app-context';
-import { Product } from '@/types';
+import { Product, Category } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import {
   Search,
@@ -20,6 +20,7 @@ import {
   X,
   ArrowRight,
   LayoutGrid,
+  ChevronDown,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -62,17 +63,22 @@ export function Header() {
   const desktopInputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
 
+  // Categories for Hover Mega Dropdown
+  const [categoriesList, setCategoriesList] = useState<Category[]>([]);
+  const [isCategoriesHovered, setIsCategoriesHovered] = useState(false);
+  const categoriesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const mainMenus: MenuItem[] = [
     { title: 'Home', title_bn: 'হোম', url: '/' },
     { title: 'Shop', title_bn: 'শপ', url: '/products' },
-    { title: 'Categories', title_bn: 'ক্যাটাগরি', url: '/products#categories' },
-    { title: 'New Arrivals', title_bn: 'নতুন গ্যাজেট', url: '/products?sort=latest' },
-    { title: 'Best Sellers', title_bn: 'সেরা পণ্য', url: '/products?sort=best-selling' },
+    { title: 'Categories', title_bn: 'ক্যাটাগরি', url: '/category' },
+    { title: 'New Arrivals', title_bn: 'নতুন গ্যাজেট', url: '/new-arrivals' },
+    { title: 'Best Sellers', title_bn: 'সেরা পণ্য', url: '/best-sellers' },
     { title: 'Deals & Offers', title_bn: 'অফার', url: '/deals' },
     { title: 'Contact Us', title_bn: 'যোগাযোগ', url: '/contact' },
   ];
 
-  // Load initial suggested / top products for search preview
+  // Load initial suggested products and categories
   useEffect(() => {
     fetch('/api/products')
       .then((res) => (res.ok ? res.json() : []))
@@ -83,7 +89,25 @@ export function Header() {
         }
       })
       .catch(() => {});
+
+    fetch('/api/categories')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setCategoriesList(data);
+      })
+      .catch(() => {});
   }, []);
+
+  const handleCategoriesMouseEnter = () => {
+    if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+    setIsCategoriesHovered(true);
+  };
+
+  const handleCategoriesMouseLeave = () => {
+    categoriesTimeoutRef.current = setTimeout(() => {
+      setIsCategoriesHovered(false);
+    }, 150);
+  };
 
   // Debounced live search
   useEffect(() => {
@@ -402,15 +426,103 @@ export function Header() {
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2.5 2xl:gap-3 flex-1 justify-center min-w-0">
             {mainMenus.map((item) => {
               const isActive =
-                item.url === '/' ? pathname === '/' : pathname.startsWith(item.url.split('?')[0]);
+                item.url === '/'
+                  ? pathname === '/'
+                  : item.url === '/category'
+                  ? pathname.startsWith('/category')
+                  : pathname === item.url;
               const label = language === 'bn' ? item.title_bn : item.title;
+              const isCategoriesMenu = item.title === 'Categories';
+
+              if (isCategoriesMenu) {
+                return (
+                  <div
+                    key={item.url}
+                    className="relative"
+                    onMouseEnter={handleCategoriesMouseEnter}
+                    onMouseLeave={handleCategoriesMouseLeave}
+                  >
+                    <Link
+                      href={item.url}
+                      className={`relative rounded-xl font-bold tracking-tight transition-all duration-200 whitespace-nowrap flex items-center gap-1 ${
+                        isScrolled
+                          ? 'px-2.5 py-1 text-xs xl:text-xs'
+                          : 'px-3 py-1.5 text-xs xl:text-sm'
+                      } ${
+                        isActive || isCategoriesHovered
+                          ? 'liquid-glass-primary shadow-sm'
+                          : 'text-neutral-700 dark:text-neutral-300 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900'
+                      }`}
+                    >
+                      <span>{label}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isCategoriesHovered ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </Link>
+
+                    {/* Round Shape Liquid Glass Categories Popup Mega-Menu */}
+                    {isCategoriesHovered && categoriesList.length > 0 && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div className="w-[580px] p-4 rounded-3xl liquid-glass-elevated border border-neutral-200/90 dark:border-neutral-800/90 backdrop-blur-2xl shadow-2xl">
+                          <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-neutral-100 dark:border-neutral-800/80 px-1">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-neutral-400">
+                              {language === 'bn' ? 'ক্যাটাগরি সমূহ' : 'Browse All Categories'}
+                            </span>
+                            <Link
+                              href="/products"
+                              onClick={() => setIsCategoriesHovered(false)}
+                              className="text-[11px] font-bold text-neutral-500 hover:text-foreground flex items-center gap-1 transition-colors"
+                            >
+                              <span>{language === 'bn' ? 'সব পণ্য দেখুন' : 'View All Products'}</span>
+                              <ArrowRight className="w-3 h-3" />
+                            </Link>
+                          </div>
+
+                          <div className="grid grid-cols-3 gap-2">
+                            {categoriesList.map((cat) => (
+                              <Link
+                                key={cat.id}
+                                href={`/products?category=${cat.slug}`}
+                                onClick={() => setIsCategoriesHovered(false)}
+                                className="flex items-center gap-2.5 p-2 rounded-2xl hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-all group border border-transparent hover:border-neutral-200 dark:hover:border-neutral-700"
+                              >
+                                <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-neutral-200 dark:bg-neutral-800 shrink-0 border border-neutral-200/60 dark:border-neutral-700">
+                                  <img
+                                    src={cat.image_url || '/placeholder.png'}
+                                    alt={cat.name}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                  />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-xs font-bold text-foreground group-hover:underline truncate">
+                                    {language === 'bn' && cat.name_bn ? cat.name_bn : cat.name}
+                                  </div>
+                                  <div className="text-[10px] text-neutral-400 truncate">
+                                    {cat.subcategories?.length
+                                      ? `${cat.subcategories.length} sub-items`
+                                      : 'Explore'}
+                                  </div>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
 
               return (
                 <Link
                   key={item.url}
                   href={item.url}
                   className={`relative rounded-xl font-bold tracking-tight transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-                    isScrolled ? 'px-2.5 py-1 text-xs xl:text-xs' : 'px-3 py-1.5 text-xs xl:text-sm'
+                    isScrolled
+                      ? 'px-2.5 py-1 text-xs xl:text-xs'
+                      : 'px-3 py-1.5 text-xs xl:text-sm'
                   } ${
                     isActive
                       ? 'liquid-glass-primary shadow-sm'
@@ -616,7 +728,11 @@ export function Header() {
               <div className="space-y-1">
                 {mainMenus.map((item) => {
                   const isActive =
-                    item.url === '/' ? pathname === '/' : pathname.startsWith(item.url.split('?')[0]);
+                    item.url === '/'
+                      ? pathname === '/'
+                      : item.url === '/category'
+                      ? pathname.startsWith('/category')
+                      : pathname === item.url;
                   const label = language === 'bn' ? item.title_bn : item.title;
 
                   return (
