@@ -19,6 +19,7 @@ import {
   Menu,
   X,
   ArrowRight,
+  LayoutGrid,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -361,237 +362,44 @@ export function Header() {
     </div>
   );
 
+  // WhatsApp URL formatter for mobile bottom nav
+  const rawNumber = settings?.general?.whatsapp || '01642603236';
+  let cleanWhatsApp = rawNumber.replace(/[^0-9]/g, '');
+  if (cleanWhatsApp.startsWith('01') && cleanWhatsApp.length === 11) {
+    cleanWhatsApp = `88${cleanWhatsApp}`;
+  } else if (!cleanWhatsApp.startsWith('880') && cleanWhatsApp.startsWith('1')) {
+    cleanWhatsApp = `880${cleanWhatsApp}`;
+  }
+  const mobileWhatsAppUrl = `https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent(
+    `Hello ${settings?.general?.brand_name || 'NS TechSphere'}, I would like to inquire about a product.`
+  )}`;
+
   return (
-    <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        isScrolled
-          ? 'liquid-glass-elevated border-b border-neutral-300 dark:border-neutral-800 shadow-md'
-          : 'liquid-glass border-b border-neutral-200/80 dark:border-neutral-800/80'
-      }`}
-    >
-      {/* Top Header Row */}
-      <div
-        className={`w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 transition-all duration-300 ${
-          isScrolled ? 'h-13 sm:h-14 py-1' : 'h-15 sm:h-20 py-2 sm:py-3'
+    <>
+      <header
+        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+          isScrolled
+            ? 'liquid-glass-elevated border-b border-neutral-300 dark:border-neutral-800 shadow-md'
+            : 'liquid-glass border-b border-neutral-200/80 dark:border-neutral-800/80'
         }`}
       >
-        {/* 1. Brand Logo */}
+        {/* Top Header Row */}
         <div
-          className={`shrink-0 transition-transform duration-300 origin-left ${
-            isScrolled ? 'scale-90' : 'scale-100'
+          className={`w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 transition-all duration-300 ${
+            isScrolled ? 'h-13 sm:h-14 py-1' : 'h-15 sm:h-20 py-2 sm:py-3'
           }`}
         >
-          <BrandLogo size="md" />
-        </div>
-
-        {/* 2. Middle Menus: Desktop only */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2.5 2xl:gap-3 flex-1 justify-center min-w-0">
-          {mainMenus.map((item) => {
-            const isActive =
-              item.url === '/' ? pathname === '/' : pathname.startsWith(item.url.split('?')[0]);
-            const label = language === 'bn' ? item.title_bn : item.title;
-
-            return (
-              <Link
-                key={item.url}
-                href={item.url}
-                className={`relative rounded-xl font-bold tracking-tight transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-                  isScrolled ? 'px-2.5 py-1 text-xs xl:text-xs' : 'px-3 py-1.5 text-xs xl:text-sm'
-                } ${
-                  isActive
-                    ? 'liquid-glass-primary shadow-sm'
-                    : 'text-neutral-700 dark:text-neutral-300 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900'
-                }`}
-              >
-                <span>{label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* 3. Global Actions: Search (desktop), Wishlist, Cart, Profile, Hamburger */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Integrated Inline Search Bar (Desktop md+ only) */}
-          <div className="relative hidden md:block" ref={desktopSearchRef}>
-            <form onSubmit={handleSearchSubmit} className="relative flex items-center">
-              <div className="relative flex items-center w-36 lg:w-44 xl:w-52 focus-within:w-48 lg:focus-within:w-56 xl:focus-within:w-64 transition-all duration-300">
-                <Search className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-800 absolute left-3 pointer-events-none shrink-0 transition-colors" />
-                <input
-                  ref={desktopInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  placeholder={language === 'bn' ? 'খুঁজুন...' : 'Search...'}
-                  className="w-full text-xs pl-8 pr-7 py-1.5 rounded-full bg-neutral-200/90 text-black border border-neutral-300/80 dark:bg-white dark:text-black dark:border-white focus:border-black dark:focus:border-black focus:outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-500 font-medium transition-all shadow-sm"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery('');
-                      desktopInputRef.current?.focus();
-                    }}
-                    aria-label="Clear search"
-                    className="absolute right-2 p-0.5 text-neutral-600 dark:text-neutral-800 hover:text-black rounded-full transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
-            </form>
-
-            {/* Desktop Live Dropdown */}
-            {isSearchFocused && (
-              <div className="absolute right-0 top-full mt-2 w-[340px] md:w-[380px] rounded-2xl liquid-glass-elevated border border-neutral-200 dark:border-neutral-800 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[75vh] overflow-y-auto no-scrollbar">
-                {renderSearchDropdown()}
-              </div>
-            )}
+          {/* 1. Brand Logo (Left on all screens) */}
+          <div
+            className={`shrink-0 transition-transform duration-300 origin-left ${
+              isScrolled ? 'scale-90' : 'scale-100'
+            }`}
+          >
+            <BrandLogo size="md" />
           </div>
 
-          {/* Wishlist Link */}
-          <Link
-            href="/account/wishlist"
-            aria-label="Wishlist"
-            className="relative p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300"
-          >
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
-            {wishlist.length > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-black dark:bg-white ring-2 ring-background" />
-            )}
-          </Link>
-
-          {/* Shopping Cart Drawer Trigger */}
-          <button
-            onClick={() => setIsCartDrawerOpen(true)}
-            aria-label="Shopping Cart"
-            className="relative p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300"
-          >
-            <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
-            {cart.items.length > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] px-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[10px] sm:text-[11px] font-black flex items-center justify-center">
-                {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
-              </span>
-            )}
-          </button>
-
-          {/* Profile Dropdown */}
-          <div className="relative" ref={profileRef}>
-            <button
-              onClick={() => setIsProfileOpen(!isProfileOpen)}
-              aria-label="Customer Profile"
-              className="p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300"
-            >
-              <User className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-
-            {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-2xl liquid-glass-elevated border border-neutral-200 dark:border-neutral-800 py-2.5 shadow-2xl animate-in fade-in zoom-in-95 duration-150 z-50">
-                <Link
-                  href="/account"
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-4 py-2.5 text-xs sm:text-sm font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
-                >
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span>{t.myAccount}</span>
-                </Link>
-                <Link
-                  href="/account/orders"
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-4 py-2.5 text-xs sm:text-sm font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
-                >
-                  <Package className="w-4 h-4 text-neutral-400" />
-                  <span>{t.myOrders}</span>
-                </Link>
-                <Link
-                  href="/account/wishlist"
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-4 py-2.5 text-xs sm:text-sm font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
-                >
-                  <Heart className="w-4 h-4 text-neutral-400" />
-                  <span>
-                    {t.wishlist} ({wishlist.length})
-                  </span>
-                </Link>
-                <div className="my-1.5 border-t border-neutral-200 dark:border-neutral-800" />
-                <div className="px-3 py-1 flex items-center justify-between gap-2">
-                  <button
-                    onClick={toggleTheme}
-                    title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                    aria-label="Toggle Theme"
-                    className="flex-1 flex items-center justify-center py-2 rounded-xl liquid-glass-btn text-neutral-700 dark:text-neutral-300"
-                  >
-                    {theme === 'dark' ? (
-                      <Sun className="w-4 h-4 text-foreground" />
-                    ) : (
-                      <Moon className="w-4 h-4 text-neutral-700" />
-                    )}
-                  </button>
-                  <button
-                    onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-                    title="Change Language"
-                    aria-label="Toggle Language"
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl liquid-glass-btn text-neutral-700 dark:text-neutral-300 text-xs font-bold"
-                  >
-                    <Globe className="w-3.5 h-3.5" />
-                    <span>{language === 'en' ? 'বাংলা' : 'ENG'}</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Menu Hamburger Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle Mobile Menu"
-            className="p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300 lg:hidden"
-          >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Dedicated Full-Width Mobile Search Bar (Only on mobile < md) */}
-      <div className="block md:hidden px-3.5 pb-2.5 pt-0.5" ref={mobileSearchRef}>
-        <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
-          <Search className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-800 absolute left-3.5 pointer-events-none shrink-0" />
-          <input
-            ref={mobileInputRef}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setIsSearchFocused(true)}
-            placeholder={language === 'bn' ? 'গ্যাজেট ও এক্সেসরিজ খুঁজুন...' : 'Search gadgets & gear...'}
-            className="w-full text-xs pl-9 pr-8 py-2 rounded-full bg-neutral-200/90 text-black border border-neutral-300/80 dark:bg-white dark:text-black dark:border-white focus:border-black dark:focus:border-black focus:outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-500 font-medium transition-all shadow-sm"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery('');
-                mobileInputRef.current?.focus();
-              }}
-              aria-label="Clear search"
-              className="absolute right-2.5 p-0.5 text-neutral-600 dark:text-neutral-800 hover:text-black rounded-full"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
-        </form>
-
-        {/* Mobile Live Dropdown */}
-        {isSearchFocused && (
-          <div className="fixed inset-x-3 top-[108px] rounded-2xl liquid-glass-elevated border border-neutral-200 dark:border-neutral-800 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[70vh] overflow-y-auto no-scrollbar">
-            {renderSearchDropdown()}
-          </div>
-        )}
-      </div>
-
-      {/* Mobile Drawer Navigation with Navigation Links + Settings */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-neutral-200 dark:border-neutral-800 liquid-glass-elevated px-4 py-3 space-y-2 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[80vh] overflow-y-auto">
-          <div className="space-y-1">
+          {/* 2. Middle Menus: Desktop (lg+) only */}
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2.5 2xl:gap-3 flex-1 justify-center min-w-0">
             {mainMenus.map((item) => {
               const isActive =
                 item.url === '/' ? pathname === '/' : pathname.startsWith(item.url.split('?')[0]);
@@ -601,59 +409,389 @@ export function Header() {
                 <Link
                   key={item.url}
                   href={item.url}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors ${
+                  className={`relative rounded-xl font-bold tracking-tight transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                    isScrolled ? 'px-2.5 py-1 text-xs xl:text-xs' : 'px-3 py-1.5 text-xs xl:text-sm'
+                  } ${
                     isActive
                       ? 'liquid-glass-primary shadow-sm'
-                      : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900'
+                      : 'text-neutral-700 dark:text-neutral-300 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900'
                   }`}
                 >
                   <span>{label}</span>
-                  <ArrowRight className="w-3.5 h-3.5 opacity-60" />
                 </Link>
               );
             })}
+          </nav>
+
+          {/* 3. Mobile Top-Right Search Bar (Only on mobile < md) */}
+          <div
+            className="relative block md:hidden flex-1 max-w-[210px] sm:max-w-xs ml-auto"
+            ref={mobileSearchRef}
+          >
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
+              <Search className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-800 absolute left-3 pointer-events-none shrink-0" />
+              <input
+                ref={mobileInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                placeholder={language === 'bn' ? 'খুঁজুন...' : 'Search...'}
+                className="w-full text-xs pl-8 pr-7 py-1.5 rounded-full bg-neutral-200/90 text-black border border-neutral-300/80 dark:bg-white dark:text-black dark:border-white focus:border-black dark:focus:border-black focus:outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-500 font-medium transition-all shadow-sm"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    mobileInputRef.current?.focus();
+                  }}
+                  aria-label="Clear search"
+                  className="absolute right-2 p-0.5 text-neutral-600 dark:text-neutral-800 hover:text-black rounded-full"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </form>
+
+            {/* Mobile Live Dropdown */}
+            {isSearchFocused && (
+              <div className="fixed inset-x-3 top-[58px] sm:top-[66px] rounded-2xl liquid-glass-elevated border border-neutral-200 dark:border-neutral-800 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[70vh] overflow-y-auto no-scrollbar">
+                {renderSearchDropdown()}
+              </div>
+            )}
           </div>
 
-          {/* Quick Account Links in Drawer */}
-          <div className="pt-2 border-t border-neutral-200/80 dark:border-neutral-800/80 space-y-1">
-            <Link
-              href="/account"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900"
-            >
-              <User className="w-3.5 h-3.5" />
-              <span>{t.myAccount}</span>
-            </Link>
-            <Link
-              href="/account/orders"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900"
-            >
-              <Package className="w-3.5 h-3.5" />
-              <span>{t.myOrders}</span>
-            </Link>
-          </div>
+          {/* 4. Global Actions (Desktop / Tablet md+): Search, Wishlist, Cart, Profile */}
+          <div className="hidden md:flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* Integrated Inline Search Bar (Desktop md+ only) */}
+            <div className="relative" ref={desktopSearchRef}>
+              <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+                <div className="relative flex items-center w-36 lg:w-44 xl:w-52 focus-within:w-48 lg:focus-within:w-56 xl:focus-within:w-64 transition-all duration-300">
+                  <Search className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-800 absolute left-3 pointer-events-none shrink-0 transition-colors" />
+                  <input
+                    ref={desktopInputRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    placeholder={language === 'bn' ? 'খুঁজুন...' : 'Search...'}
+                    className="w-full text-xs pl-8 pr-7 py-1.5 rounded-full bg-neutral-200/90 text-black border border-neutral-300/80 dark:bg-white dark:text-black dark:border-white focus:border-black dark:focus:border-black focus:outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-500 font-medium transition-all shadow-sm"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery('');
+                        desktopInputRef.current?.focus();
+                      }}
+                      aria-label="Clear search"
+                      className="absolute right-2 p-0.5 text-neutral-600 dark:text-neutral-800 hover:text-black rounded-full transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              </form>
 
-          {/* Quick Theme & Language in Drawer */}
-          <div className="pt-2 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between gap-2">
+              {/* Desktop Live Dropdown */}
+              {isSearchFocused && (
+                <div className="absolute right-0 top-full mt-2 w-[340px] md:w-[380px] rounded-2xl liquid-glass-elevated border border-neutral-200 dark:border-neutral-800 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[75vh] overflow-y-auto no-scrollbar">
+                  {renderSearchDropdown()}
+                </div>
+              )}
+            </div>
+
+            {/* Wishlist Link */}
+            <Link
+              href="/account/wishlist"
+              aria-label="Wishlist"
+              className="relative p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300"
+            >
+              <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+              {wishlist.length > 0 && (
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-black dark:bg-white ring-2 ring-background" />
+              )}
+            </Link>
+
+            {/* Shopping Cart Drawer Trigger */}
             <button
-              onClick={toggleTheme}
-              className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl liquid-glass-btn text-xs font-bold text-foreground"
+              onClick={() => setIsCartDrawerOpen(true)}
+              aria-label="Shopping Cart"
+              className="relative p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300"
             >
-              {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-              <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+              <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
+              {cart.items.length > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] px-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[10px] sm:text-[11px] font-black flex items-center justify-center">
+                  {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
+                </span>
+              )}
             </button>
+
+            {/* Profile Dropdown */}
+            <div className="relative" ref={profileRef}>
+              <button
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                aria-label="Customer Profile"
+                className="p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300"
+              >
+                <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+
+              {isProfileOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl liquid-glass-elevated border border-neutral-200 dark:border-neutral-800 py-2.5 shadow-2xl animate-in fade-in zoom-in-95 duration-150 z-50">
+                  <Link
+                    href="/account"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-xs sm:text-sm font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+                  >
+                    <User className="w-4 h-4 text-neutral-400" />
+                    <span>{t.myAccount}</span>
+                  </Link>
+                  <Link
+                    href="/account/orders"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-xs sm:text-sm font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+                  >
+                    <Package className="w-4 h-4 text-neutral-400" />
+                    <span>{t.myOrders}</span>
+                  </Link>
+                  <Link
+                    href="/account/wishlist"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-xs sm:text-sm font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+                  >
+                    <Heart className="w-4 h-4 text-neutral-400" />
+                    <span>
+                      {t.wishlist} ({wishlist.length})
+                    </span>
+                  </Link>
+                  <div className="my-1.5 border-t border-neutral-200 dark:border-neutral-800" />
+                  <div className="px-3 py-1 flex items-center justify-between gap-2">
+                    <button
+                      onClick={toggleTheme}
+                      title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                      aria-label="Toggle Theme"
+                      className="flex-1 flex items-center justify-center py-2 rounded-xl liquid-glass-btn text-neutral-700 dark:text-neutral-300"
+                    >
+                      {theme === 'dark' ? (
+                        <Sun className="w-4 h-4 text-foreground" />
+                      ) : (
+                        <Moon className="w-4 h-4 text-neutral-700" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+                      title="Change Language"
+                      aria-label="Toggle Language"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl liquid-glass-btn text-neutral-700 dark:text-neutral-300 text-xs font-bold"
+                    >
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>{language === 'en' ? 'বাংলা' : 'ENG'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Tablet Menu Hamburger Button (md to lg) */}
             <button
-              onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-              className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl liquid-glass-btn text-xs font-bold text-foreground"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle Navigation Menu"
+              className="p-2 sm:p-2.5 rounded-full liquid-glass-btn text-neutral-700 dark:text-neutral-300 lg:hidden"
             >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{language === 'en' ? 'বাংলা' : 'English'}</span>
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
-      )}
-    </header>
+
+        {/* Mobile Drawer Menu (Slides down when Menu is tapped) */}
+        {isMobileMenuOpen && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 lg:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            <div className="relative z-30 lg:hidden border-t border-neutral-200 dark:border-neutral-800 liquid-glass-elevated px-4 py-3 space-y-2 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[75vh] overflow-y-auto">
+              <div className="space-y-1">
+                {mainMenus.map((item) => {
+                  const isActive =
+                    item.url === '/' ? pathname === '/' : pathname.startsWith(item.url.split('?')[0]);
+                  const label = language === 'bn' ? item.title_bn : item.title;
+
+                  return (
+                    <Link
+                      key={item.url}
+                      href={item.url}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors ${
+                        isActive
+                          ? 'liquid-glass-primary shadow-sm'
+                          : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900'
+                      }`}
+                    >
+                      <span>{label}</span>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-60" />
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Quick Account Links in Drawer */}
+              <div className="pt-2 border-t border-neutral-200/80 dark:border-neutral-800/80 space-y-1">
+                <Link
+                  href="/account"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  <span>{t.myAccount}</span>
+                </Link>
+                <Link
+                  href="/account/orders"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+                >
+                  <Package className="w-3.5 h-3.5" />
+                  <span>{t.myOrders}</span>
+                </Link>
+              </div>
+
+              {/* Quick Theme & Language in Drawer */}
+              <div className="pt-2 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between gap-2">
+                <button
+                  onClick={toggleTheme}
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl liquid-glass-btn text-xs font-bold text-foreground"
+                >
+                  {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+                  <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                </button>
+                <button
+                  onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl liquid-glass-btn text-xs font-bold text-foreground"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>{language === 'en' ? 'বাংলা' : 'English'}</span>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </header>
+
+      {/* Mobile Bottom Navigation Bar with Liquid Glass */}
+      <nav
+        aria-label="Mobile Bottom Navigation"
+        className="fixed bottom-0 left-0 right-0 z-40 block md:hidden liquid-glass-elevated border-t border-neutral-200/80 dark:border-neutral-800/80 backdrop-blur-2xl shadow-2xl px-2 py-1.5"
+      >
+        <div className="grid grid-cols-5 items-center justify-items-center">
+          {/* 1. Menu Button */}
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle Navigation Menu"
+            className="flex flex-col items-center justify-center py-1 group w-full"
+          >
+            <div
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                isMobileMenuOpen
+                  ? 'bg-black text-white dark:bg-white dark:text-black shadow-md scale-105'
+                  : 'liquid-glass-btn text-neutral-800 dark:text-neutral-200'
+              }`}
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </div>
+            <span className="text-[10px] font-bold text-neutral-600 dark:text-neutral-400 mt-1 transition-colors group-hover:text-foreground">
+              {language === 'bn' ? 'মেনু' : 'Menu'}
+            </span>
+          </button>
+
+          {/* 2. Shop / Catalog Link */}
+          <Link
+            href="/products"
+            aria-label="Browse Shop"
+            className="flex flex-col items-center justify-center py-1 group w-full"
+          >
+            <div
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                pathname === '/products'
+                  ? 'bg-black text-white dark:bg-white dark:text-black shadow-md scale-105'
+                  : 'liquid-glass-btn text-neutral-800 dark:text-neutral-200'
+              }`}
+            >
+              <LayoutGrid className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] font-bold text-neutral-600 dark:text-neutral-400 mt-1 transition-colors group-hover:text-foreground">
+              {language === 'bn' ? 'শপ' : 'Shop'}
+            </span>
+          </Link>
+
+          {/* 3. Cart Trigger */}
+          <button
+            type="button"
+            onClick={() => setIsCartDrawerOpen(true)}
+            aria-label="Shopping Cart"
+            className="flex flex-col items-center justify-center py-1 group w-full"
+          >
+            <div className="relative w-10 h-10 rounded-full flex items-center justify-center liquid-glass-btn text-neutral-800 dark:text-neutral-200 transition-all duration-200 active:scale-95">
+              <ShoppingBag className="w-5 h-5" />
+              {cart.items.length > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[10px] font-black flex items-center justify-center shadow-md animate-in zoom-in-75">
+                  {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
+                </span>
+              )}
+            </div>
+            <span className="text-[10px] font-bold text-neutral-600 dark:text-neutral-400 mt-1 transition-colors group-hover:text-foreground">
+              {language === 'bn' ? 'কার্ট' : 'Cart'}
+            </span>
+          </button>
+
+          {/* 4. Wishlist Link */}
+          <Link
+            href="/account/wishlist"
+            aria-label="Wishlist"
+            className="flex flex-col items-center justify-center py-1 group w-full"
+          >
+            <div
+              className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                pathname === '/account/wishlist'
+                  ? 'bg-black text-white dark:bg-white dark:text-black shadow-md scale-105'
+                  : 'liquid-glass-btn text-neutral-800 dark:text-neutral-200'
+              }`}
+            >
+              <Heart className="w-5 h-5" />
+              {wishlist.length > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-background" />
+              )}
+            </div>
+            <span className="text-[10px] font-bold text-neutral-600 dark:text-neutral-400 mt-1 transition-colors group-hover:text-foreground">
+              {language === 'bn' ? 'উইশলিস্ট' : 'Wishlist'}
+            </span>
+          </Link>
+
+          {/* 5. WhatsApp Button */}
+          <a
+            href={mobileWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat on WhatsApp (01642603236)"
+            className="flex flex-col items-center justify-center py-1 group w-full"
+          >
+            <div className="relative w-10 h-10 rounded-full flex items-center justify-center bg-[#25D366] text-white shadow-lg whatsapp-glow hover:scale-110 active:scale-95 transition-transform duration-200">
+              <svg
+                viewBox="0 0 24 24"
+                className="w-5 h-5 fill-current text-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+              </svg>
+            </div>
+            <span className="text-[10px] font-bold text-[#25D366] mt-1">
+              WhatsApp
+            </span>
+          </a>
+        </div>
+      </nav>
+    </>
   );
 }

@@ -27,7 +27,7 @@ export function WhatsAppButton() {
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp (01642603236)"
       title="Chat on WhatsApp (01642603236)"
-      className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex items-center justify-center w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-xl hover:scale-110 active:scale-95 transition-transform duration-200 whatsapp-glow group focus:outline-none"
+      className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 hidden md:flex items-center justify-center w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-xl hover:scale-110 active:scale-95 transition-transform duration-200 whatsapp-glow group focus:outline-none"
     >
       {/* Official WhatsApp SVG Logo Icon */}
       <svg
