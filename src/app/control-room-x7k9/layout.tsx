@@ -286,48 +286,42 @@ export default function AdminLayout({
           isSidebarCollapsed ? 'w-20' : 'w-64'
         }`}
       >
-        {/* Brand / Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-800/80">
-          {!isSidebarCollapsed ? (
-            <Link href={adminBase} className="flex items-center gap-2.5 min-w-0">
-              <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 shadow-sm ring-1 ring-neutral-300 dark:ring-neutral-700 bg-white dark:bg-neutral-900 p-0.5">
-                <Image
-                  src="/images/ns-logo.jpg"
-                  alt="NS TechSphere"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-full"
-                  priority
-                />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="font-extrabold text-xs tracking-wider uppercase text-foreground truncate">
+        {/* Brand / Logo Button - Clicking logo toggles sidebar expand / collapse */}
+        <div
+          className={`h-16 flex items-center border-b border-neutral-200 dark:border-neutral-800/80 transition-all ${
+            isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="flex items-center gap-3 group focus:outline-none text-left w-full cursor-pointer"
+            title={isSidebarCollapsed ? 'Click logo to expand sidebar' : 'Click logo to collapse sidebar'}
+          >
+            <div
+              className={`relative rounded-full overflow-hidden shrink-0 shadow-sm ring-1 ring-neutral-300 dark:ring-neutral-700 bg-white dark:bg-neutral-900 p-0.5 transition-transform duration-200 group-hover:scale-105 active:scale-95 ${
+                isSidebarCollapsed ? 'w-10 h-10 mx-auto' : 'w-10 h-10'
+              }`}
+            >
+              <Image
+                src="/images/ns-logo.jpg"
+                alt="NS TechSphere"
+                width={44}
+                height={44}
+                className="w-full h-full object-cover rounded-full"
+                priority
+              />
+            </div>
+            {!isSidebarCollapsed && (
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="font-black text-sm tracking-wide uppercase text-foreground truncate group-hover:text-neutral-500 dark:group-hover:text-neutral-300 transition-colors">
                   NS TechSphere
                 </span>
-                <span className="text-[10px] text-neutral-500 font-mono font-semibold">
+                <span className="text-xs text-neutral-500 font-mono font-medium">
                   Control Room
                 </span>
               </div>
-            </Link>
-          ) : (
-            <Link href={adminBase} className="mx-auto">
-              <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-sm ring-1 ring-neutral-300 dark:ring-neutral-700 bg-white dark:bg-neutral-900 p-0.5">
-                <Image
-                  src="/images/ns-logo.jpg"
-                  alt="NS TechSphere"
-                  width={36}
-                  height={36}
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </div>
-            </Link>
-          )}
-          <button
-            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-foreground transition-colors ml-1 shrink-0"
-            title="Toggle Sidebar"
-          >
-            <MenuIcon className="w-4 h-4" />
+            )}
           </button>
         </div>
 
@@ -336,7 +330,7 @@ export default function AdminLayout({
           {navGroups.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
               {!isSidebarCollapsed && (
-                <div className="px-3 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-1.5 font-mono">
+                <div className="px-3 text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2 font-mono">
                   {group.title}
                 </div>
               )}
@@ -347,13 +341,13 @@ export default function AdminLayout({
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                       isActive
                         ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
                         : 'text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900'
                     }`}
                   >
-                    <Icon className="w-4 h-4 shrink-0" />
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
                     {!isSidebarCollapsed && <span>{item.label}</span>}
                   </Link>
                 );
@@ -367,56 +361,56 @@ export default function AdminLayout({
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+            className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
           >
-            <ExternalLink className="w-4 h-4 shrink-0" />
+            <ExternalLink className="w-4.5 h-4.5 shrink-0" />
             {!isSidebarCollapsed && <span>View Storefront</span>}
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer"
           >
-            <LogOut className="w-4 h-4 shrink-0" />
+            <LogOut className="w-4.5 h-4.5 shrink-0" />
             {!isSidebarCollapsed && <span>Sign Out</span>}
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 text-sm">
         {/* Top Header */}
         <header className="h-16 border-b border-neutral-200 dark:border-neutral-800/80 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20">
           {/* Breadcrumb Trail */}
-          <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <div className="flex items-center gap-2 text-sm text-neutral-400">
             <span className="font-semibold text-neutral-500">Admin</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-4 h-4" />
             <span className="font-bold text-foreground">{currentPageTitle}</span>
           </div>
 
           {/* Right Status Actions */}
           <div className="flex items-center gap-4">
             {/* Live Server Operational Indicator */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-[11px] font-mono">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-mono">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-neutral-400">Authenticated</span>
             </div>
 
-            <div className="flex items-center gap-3 text-xs">
-              <div className="w-8 h-8 rounded-full bg-black text-white dark:bg-white dark:text-black border border-neutral-300 dark:border-neutral-700 flex items-center justify-center font-bold text-xs shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-black text-white dark:bg-white dark:text-black border border-neutral-300 dark:border-neutral-700 flex items-center justify-center font-bold text-xs shadow-sm">
                 SA
               </div>
               <div className="hidden md:block text-left">
-                <div className="font-bold text-foreground text-xs leading-none">
+                <div className="font-bold text-foreground text-sm leading-none">
                   Super Administrator
                 </div>
-                <div className="text-[10px] text-neutral-400 font-mono mt-0.5">
+                <div className="text-xs text-neutral-400 font-mono mt-0.5">
                   {adminEmail}
                 </div>
               </div>
               <button
                 onClick={handleLogout}
                 title="Sign Out"
-                className="p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-red-500 hover:border-red-300 transition-colors"
+                className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-red-500 hover:border-red-300 transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
               </button>
