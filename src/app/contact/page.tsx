@@ -2,134 +2,323 @@
 
 import React, { useState } from 'react';
 import { useApp } from '@/lib/context/app-context';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  CheckCircle2,
+  MessageCircle,
+  Clock,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  HelpCircle,
+  ChevronRight,
+  ExternalLink,
+} from 'lucide-react';
+import Link from 'next/link';
 
 export default function ContactPage() {
-  const { settings, showToast } = useApp();
+  const { settings, showToast, language } = useApp();
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('Order Inquiry');
+  const [orderNumber, setOrderNumber] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) return;
+    if (!name || !message) return;
     setSubmitted(true);
-    showToast('Your message has been dispatched to our support team.', 'success');
+    showToast('Your inquiry has been registered. Our support engineers will contact you shortly.', 'success');
   };
 
+  const whatsappDirectUrl = `https://wa.me/8801642603236?text=${encodeURIComponent(
+    'Hello NS TechSphere Support, I would like to make an inquiry.'
+  )}`;
+
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12 space-y-10">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-black tracking-tight text-foreground">
-          Contact Customer Care
+    <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 sm:py-12 space-y-10 max-w-5xl mx-auto">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
+        <Link href="/" className="hover:text-foreground">
+          Home
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5" />
+        <span className="text-foreground font-medium">Support & Help Center</span>
+      </nav>
+
+      {/* Hero Header */}
+      <div className="rounded-3xl border border-neutral-200/90 dark:border-neutral-800/90 liquid-glass-elevated p-6 sm:p-10 relative overflow-hidden space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-neutral-300 dark:border-neutral-700 bg-black/5 dark:bg-white/10 text-[10px] font-bold uppercase tracking-wider text-foreground">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>Customer First Support</span>
+        </div>
+        <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
+          Support & Help Center
         </h1>
-        <p className="text-xs sm:text-sm text-neutral-400">
-          We are ready to assist you with inquiries regarding device availability, warranty claims, and order delivery.
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-2xl leading-relaxed">
+          Need assistance with genuine device selection, warranty claims, or delivery tracking? Our expert tech support team is here to assist you 7 days a week.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Contact Info */}
-        <div className="p-8 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/40 space-y-6">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-foreground">
-            Headquarters & Support
-          </h2>
+      {/* 4 Contact Channels Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Helpline */}
+        <div className="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 liquid-glass space-y-2">
+          <div className="w-10 h-10 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-bold">
+            <Phone className="w-5 h-5" />
+          </div>
+          <h3 className="text-sm font-black text-foreground">Phone Helpline</h3>
+          <p className="text-base font-bold text-foreground">01642603236</p>
+          <p className="text-xs text-neutral-400">10:00 AM – 10:00 PM (Everyday)</p>
+        </div>
 
-          <div className="space-y-4 text-xs text-neutral-500">
-            <div className="flex items-start gap-3">
-              <MapPin className="w-4 h-4 text-foreground mt-0.5 shrink-0" />
-              <span>{settings.general.address}</span>
+        {/* WhatsApp */}
+        <div className="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 liquid-glass space-y-2">
+          <div className="w-10 h-10 rounded-xl bg-[#25D366] text-white flex items-center justify-center font-bold">
+            <MessageCircle className="w-5 h-5" />
+          </div>
+          <h3 className="text-sm font-black text-foreground">WhatsApp Chat</h3>
+          <a
+            href={whatsappDirectUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-base font-bold text-emerald-600 dark:text-emerald-400 hover:underline block"
+          >
+            01642603236 ↗
+          </a>
+          <p className="text-xs text-neutral-400">Instant response & photo sharing</p>
+        </div>
+
+        {/* Email */}
+        <div className="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 liquid-glass space-y-2">
+          <div className="w-10 h-10 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-bold">
+            <Mail className="w-5 h-5" />
+          </div>
+          <h3 className="text-sm font-black text-foreground">Email Support</h3>
+          <p className="text-xs font-bold text-foreground truncate">support@nstechsphere.store</p>
+          <p className="text-xs text-neutral-400">Response within 4–6 business hours</p>
+        </div>
+
+        {/* Office */}
+        <div className="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 liquid-glass space-y-2">
+          <div className="w-10 h-10 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-bold">
+            <MapPin className="w-5 h-5" />
+          </div>
+          <h3 className="text-sm font-black text-foreground">Headquarters</h3>
+          <p className="text-xs font-bold text-foreground">Motijheel C/A, Dhaka</p>
+          <p className="text-xs text-neutral-400">Dhaka 1000, Bangladesh</p>
+        </div>
+      </div>
+
+      {/* Quick Self-Service Links */}
+      <div className="p-5 sm:p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 liquid-glass space-y-3">
+        <h3 className="text-xs font-black uppercase tracking-wider text-neutral-400">
+          Fast Self-Service Actions
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Link
+            href="/track-order"
+            className="p-3.5 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900/80 hover:bg-neutral-200/80 dark:hover:bg-neutral-800/80 transition-all flex items-center justify-between group border border-neutral-200/60 dark:border-neutral-800"
+          >
+            <div className="flex items-center gap-2.5">
+              <Truck className="w-4 h-4 text-foreground" />
+              <span className="text-xs font-bold text-foreground">Track Your Order</span>
             </div>
+            <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+          </Link>
 
-            <div className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-foreground shrink-0" />
-              <span>Helpline: {settings.general.phone}</span>
+          <Link
+            href="/return-policy"
+            className="p-3.5 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900/80 hover:bg-neutral-200/80 dark:hover:bg-neutral-800/80 transition-all flex items-center justify-between group border border-neutral-200/60 dark:border-neutral-800"
+          >
+            <div className="flex items-center gap-2.5">
+              <RotateCcw className="w-4 h-4 text-foreground" />
+              <span className="text-xs font-bold text-foreground">7-Day Return & Replacement</span>
             </div>
+            <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+          </Link>
 
-            <a
-              href={`https://wa.me/8801642603236?text=${encodeURIComponent('Hello NS TechSphere, I would like to inquire about a product.')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 hover:underline font-semibold"
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current shrink-0">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-              </svg>
-              <span>WhatsApp: 01642603236 (Direct Chat)</span>
-            </a>
-
-            <div className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-foreground shrink-0" />
-              <span>{settings.general.email}</span>
+          <Link
+            href="/shipping-policy"
+            className="p-3.5 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900/80 hover:bg-neutral-200/80 dark:hover:bg-neutral-800/80 transition-all flex items-center justify-between group border border-neutral-200/60 dark:border-neutral-800"
+          >
+            <div className="flex items-center gap-2.5">
+              <Clock className="w-4 h-4 text-foreground" />
+              <span className="text-xs font-bold text-foreground">Delivery Rates & Policy</span>
             </div>
+            <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Contact Form & Support Details Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Support Information (Left 1 Col) */}
+        <div className="p-6 sm:p-8 rounded-3xl border border-neutral-200 dark:border-neutral-800 liquid-glass space-y-6">
+          <div>
+            <h3 className="text-base font-black text-foreground">Direct Assistance</h3>
+            <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+              Prefer instant live conversation? Connect with our dedicated representatives via WhatsApp for priority service.
+            </p>
           </div>
 
-          <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 text-[11px] text-neutral-400 leading-normal">
-            Operational Hours: Saturday - Thursday (10:00 AM - 8:00 PM BST). Closed on official national holidays.
+          <a
+            href={whatsappDirectUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full py-3.5 rounded-2xl bg-[#25D366] text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:opacity-90 active:scale-95 transition-all"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>Chat on WhatsApp</span>
+          </a>
+
+          <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3 text-xs">
+            <div className="flex items-start gap-2.5">
+              <Clock className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <p className="font-bold text-foreground">Operating Schedule</p>
+                <p className="text-neutral-400">Saturday – Thursday: 10:00 AM – 10:00 PM</p>
+                <p className="text-neutral-400">Friday: 2:00 PM – 10:00 PM</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5">
+              <ShieldCheck className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <p className="font-bold text-foreground">Authorized Warranty Support</p>
+                <p className="text-neutral-400">Full manufacturer replacement support across Bangladesh.</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Contact Message Form */}
-        <div className="p-8 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/60 shadow-sm">
+        {/* Comprehensive Interactive Contact Form (Right 2 Cols) */}
+        <div className="lg:col-span-2 p-6 sm:p-8 rounded-3xl border border-neutral-200 dark:border-neutral-800 liquid-glass-elevated shadow-xl">
           {submitted ? (
-            <div className="py-12 text-center space-y-3">
-              <CheckCircle2 className="w-10 h-10 text-foreground mx-auto" />
-              <h3 className="text-sm font-bold text-foreground">Message Received</h3>
-              <p className="text-xs text-neutral-400">
-                A member of our technical team will contact you shortly.
+            <div className="py-16 text-center space-y-3">
+              <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-7 h-7" />
+              </div>
+              <h3 className="text-base font-black text-foreground">Inquiry Successfully Dispatched</h3>
+              <p className="text-xs text-neutral-400 max-w-sm mx-auto">
+                Thank you, {name}. A member of our support team will review your message and contact you via phone or email shortly.
               </p>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="mt-4 px-6 py-2.5 rounded-xl liquid-glass-btn text-xs font-bold text-foreground"
+              >
+                Send Another Inquiry
+              </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1">
+                <h3 className="text-base font-black text-foreground">Send an Official Message</h3>
+                <p className="text-xs text-neutral-400">
+                  Fill in your details and message below; we typically reply within a few hours.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-neutral-600 dark:text-neutral-300 block mb-1">
+                    Your Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Tanvir Ahmed"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/70 text-foreground outline-none focus:border-black dark:focus:border-white transition-colors"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-neutral-600 dark:text-neutral-300 block mb-1">
+                    Contact Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. 017XXXXXXXX"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/70 text-foreground outline-none focus:border-black dark:focus:border-white transition-colors"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-neutral-600 dark:text-neutral-300 block mb-1">
+                    Email Address (Optional)
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/70 text-foreground outline-none focus:border-black dark:focus:border-white transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-neutral-600 dark:text-neutral-300 block mb-1">
+                    Topic of Inquiry
+                  </label>
+                  <select
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/70 text-foreground outline-none focus:border-black dark:focus:border-white transition-colors cursor-pointer"
+                  >
+                    <option value="Order Inquiry">Order & Shipment Inquiry</option>
+                    <option value="Product Availability">Product Stock & Specs</option>
+                    <option value="Warranty Claim">Warranty or Replacement</option>
+                    <option value="Payment Issue">Payment Verification</option>
+                    <option value="Corporate Order">Corporate Bulk Purchase</option>
+                  </select>
+                </div>
+              </div>
+
               <div>
-                <label className="text-xs font-semibold text-neutral-500 block mb-1">
-                  Full Name
+                <label className="text-xs font-bold text-neutral-600 dark:text-neutral-300 block mb-1">
+                  Order Reference Number (If applicable)
                 </label>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your Name"
-                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-background text-foreground outline-none"
-                  required
+                  value={orderNumber}
+                  onChange={(e) => setOrderNumber(e.target.value)}
+                  placeholder="e.g. NS-20261125-XXXX"
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/70 text-foreground outline-none focus:border-black dark:focus:border-white transition-colors"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-neutral-500 block mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-background text-foreground outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-neutral-500 block mb-1">
-                  Message Details
+                <label className="text-xs font-bold text-neutral-600 dark:text-neutral-300 block mb-1">
+                  Detailed Message *
                 </label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
-                  placeholder="Specify product SKU or order number if applicable..."
-                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-background text-foreground outline-none resize-none"
+                  placeholder="Describe your inquiry, device model, or issue in detail..."
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/70 text-foreground outline-none resize-none focus:border-black dark:focus:border-white transition-colors"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 px-6 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-smooth flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-6 rounded-2xl bg-black text-white dark:bg-white dark:text-black text-xs font-black uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>Send Message</span>
+                <span>Submit Support Ticket</span>
               </button>
             </form>
           )}

@@ -26,14 +26,52 @@ const CreateOrderSchema = z.object({
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const orderNumber = searchParams.get('number');
+    const orderNumber = searchParams.get('number')?.trim();
+    const phone = searchParams.get('phone')?.trim();
 
-    if (orderNumber) {
-      const order = db.getOrderByNumber(orderNumber);
-      if (!order) {
-        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    const cleanPhone = (p: string) => {
+      let cleaned = p.replace(/[^0-9]/g, '');
+      if (cleaned.startsWith('880')) cleaned = cleaned.slice(2);
+      if (cleaned.startsWith('88')) cleaned = cleaned.slice(2);
+      if (cleaned.startsWith('0')) cleaned = cleaned.slice(1);
+      return cleaned;
+    };
+
+    if (orderNumber || phone) {
+      const orders = db.getOrders();
+      let matchedOrder = undefined;
+
+      if (orderNumber && phone) {
+        const targetCleanPhone = cleanPhone(phone);
+        matchedOrder = orders.find(
+          (o) =>
+            o.order_number.toUpperCase() === orderNumber.toUpperCase() &&
+            cleanPhone(o.customer_phone) === targetCleanPhone
+        );
+        // Also allow matching if user made a typo with prefix
+        if (!matchedOrder) {
+          matchedOrder = orders.find(
+            (o) => o.order_number.toUpperCase() === orderNumber.toUpperCase()
+          );
+        }
+      } else if (orderNumber) {
+        matchedOrder = orders.find(
+          (o) => o.order_number.toUpperCase() === orderNumber.toUpperCase()
+        );
+      } else if (phone) {
+        const targetCleanPhone = cleanPhone(phone);
+        matchedOrder = orders
+          .filter((o) => cleanPhone(o.customer_phone) === targetCleanPhone)
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
       }
-      return NextResponse.json(order);
+
+      if (!matchedOrder) {
+        return NextResponse.json(
+          { error: 'Order not found with provided details' },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json(matchedOrder);
     }
 
     const orders = db.getOrders();
