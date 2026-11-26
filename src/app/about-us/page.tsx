@@ -53,7 +53,7 @@ export default function AboutUsPage() {
   const brandPartners = ['Apple', 'Samsung', 'Sony', 'Anker', 'DJI', 'Logitech', 'Baseus', 'Xiaomi'];
 
   return (
-    <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 sm:py-12 space-y-12 max-w-5xl mx-auto">
+    <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 sm:py-12 space-y-12">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
         <Link href="/" className="hover:text-foreground">
