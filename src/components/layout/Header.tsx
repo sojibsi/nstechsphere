@@ -401,10 +401,10 @@ export function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-40 w-full transition-all duration-300 rounded-b-[20px] sm:rounded-b-[24px] ${
           isScrolled
-            ? 'liquid-glass-elevated border-b border-neutral-300 dark:border-neutral-800 shadow-md'
-            : 'liquid-glass border-b border-neutral-200/80 dark:border-neutral-800/80'
+            ? 'bg-white/85 dark:bg-neutral-950/85 backdrop-blur-2xl border-b border-x border-white/80 dark:border-neutral-800/90 shadow-[0_10px_35px_rgba(0,0,0,0.07)] dark:shadow-[0_10px_35px_rgba(0,0,0,0.45)]'
+            : 'bg-white/75 dark:bg-neutral-950/75 backdrop-blur-2xl border-b border-x border-white/60 dark:border-neutral-800/80 shadow-[0_8px_25px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_25px_rgba(0,0,0,0.25)]'
         }`}
       >
         {/* Top Header Row */}
@@ -724,7 +724,7 @@ export function Header() {
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 lg:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="relative z-30 lg:hidden border-t border-neutral-200 dark:border-neutral-800 liquid-glass-elevated px-4 py-3 space-y-2 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[75vh] overflow-y-auto">
+            <div className="relative z-30 lg:hidden border-t border-neutral-200/80 dark:border-neutral-800/80 rounded-b-[20px] sm:rounded-b-[24px] bg-white/90 dark:bg-neutral-950/90 backdrop-blur-2xl px-4 py-3 space-y-2 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[75vh] overflow-y-auto">
               <div className="space-y-1">
                 {mainMenus.map((item) => {
                   const isActive =
