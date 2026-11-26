@@ -46,6 +46,7 @@ export function Header() {
   // Profile and Mobile Menu states
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
   // Inline Search States
@@ -127,6 +128,15 @@ export function Header() {
     setIsProfileOpen(false);
   }, [pathname]);
 
+  // Window scroll listener for animated compact header
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -136,10 +146,24 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full liquid-glass border-b border-neutral-200/80 dark:border-neutral-800/80">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 h-16 sm:h-20 flex items-center justify-between gap-3 lg:gap-6">
+    <header
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        isScrolled
+          ? 'liquid-glass-elevated border-b border-neutral-300 dark:border-neutral-800 shadow-md'
+          : 'liquid-glass border-b border-neutral-200/80 dark:border-neutral-800/80'
+      }`}
+    >
+      <div
+        className={`w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 flex items-center justify-between gap-3 lg:gap-6 transition-all duration-300 ${
+          isScrolled ? 'h-13 sm:h-14 py-1' : 'h-16 sm:h-20 py-2 sm:py-3'
+        }`}
+      >
         {/* 1. Brand Logo */}
-        <div className="shrink-0">
+        <div
+          className={`shrink-0 transition-transform duration-300 origin-left ${
+            isScrolled ? 'scale-90' : 'scale-100'
+          }`}
+        >
           <BrandLogo size="md" />
         </div>
 
@@ -154,7 +178,9 @@ export function Header() {
               <Link
                 key={item.url}
                 href={item.url}
-                className={`relative px-3 py-1.5 rounded-xl text-xs xl:text-sm font-bold tracking-tight transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                className={`relative rounded-xl font-bold tracking-tight transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                  isScrolled ? 'px-2.5 py-1 text-xs xl:text-xs' : 'px-3 py-1.5 text-xs xl:text-sm'
+                } ${
                   isActive
                     ? 'liquid-glass-primary shadow-sm'
                     : 'text-neutral-700 dark:text-neutral-300 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-900'
@@ -172,7 +198,7 @@ export function Header() {
           <div className="relative" ref={searchContainerRef}>
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
               <div className="relative flex items-center w-28 sm:w-36 md:w-44 lg:w-36 xl:w-48 focus-within:w-36 sm:focus-within:w-48 md:focus-within:w-56 lg:focus-within:w-48 xl:focus-within:w-60 transition-all duration-300">
-                <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none shrink-0" />
+                <Search className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-800 absolute left-3 pointer-events-none shrink-0 transition-colors" />
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -180,7 +206,7 @@ export function Header() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   placeholder={language === 'bn' ? 'খুঁজুন...' : 'Search...'}
-                  className="w-full text-xs pl-8 pr-7 py-1.5 rounded-full liquid-glass border border-neutral-200 dark:border-neutral-800 focus:border-black dark:focus:border-white focus:outline-none text-foreground placeholder:text-neutral-400 font-medium transition-all shadow-sm"
+                  className="w-full text-xs pl-8 pr-7 py-1.5 rounded-full bg-neutral-200/90 text-black border border-neutral-300/80 dark:bg-white dark:text-black dark:border-white focus:border-black dark:focus:border-black focus:outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-500 font-medium transition-all shadow-sm"
                 />
                 {searchQuery && (
                   <button
@@ -190,7 +216,7 @@ export function Header() {
                       searchInputRef.current?.focus();
                     }}
                     aria-label="Clear search"
-                    className="absolute right-2 p-0.5 text-neutral-400 hover:text-foreground rounded-full transition-colors"
+                    className="absolute right-2 p-0.5 text-neutral-600 dark:text-neutral-800 hover:text-black rounded-full transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
