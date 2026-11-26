@@ -42,18 +42,19 @@ interface AppContextType {
 
 const defaultSettings: WebsiteSettings = {
   general: {
-    brand_name: 'Gadget & Gear',
-    tagline: 'Premium Electronics & Smart Technology',
-    email: 'support@gadgetgear.com.bd',
-    phone: '+880 9612 000 000',
-    whatsapp: '+8801711223344',
-    address: 'Bashundhara City, Dhaka, Bangladesh',
+    brand_name: 'NS TechSphere',
+    tagline: 'Explore the World of Technology.',
+    email: 'support@nstechsphere.store',
+    phone: '01642603236',
+    whatsapp: '01642603236',
+    address: 'Motijheel Commercial Area, Dhaka 1000, Bangladesh',
     currency: 'BDT',
     currency_symbol: '৳',
+    logo_url: '/images/ns-logo.jpg',
   },
   shipping: {
-    inside_dhaka_fee: 60,
-    outside_dhaka_fee: 120,
+    inside_dhaka_fee: 70,
+    outside_dhaka_fee: 130,
     free_shipping_threshold: 25000,
   },
   payment: {

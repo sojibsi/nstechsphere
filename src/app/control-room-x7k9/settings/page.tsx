@@ -159,7 +159,7 @@ export default function AdminSettingsPage() {
                     general: { ...settings.general, whatsapp: e.target.value },
                   })
                 }
-                placeholder="+8801711223344"
+                placeholder="01642603236"
                 className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-background text-foreground outline-none font-mono"
               />
             </div>
