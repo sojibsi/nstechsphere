@@ -121,9 +121,9 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 space-y-8">
-      <div className="pb-6 border-b border-neutral-200 dark:border-neutral-800">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+    <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 sm:py-8 space-y-6 sm:space-y-8">
+      <div className="pb-4 sm:pb-6 border-b border-neutral-200 dark:border-neutral-800">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
           Checkout & Order Confirmation
         </h1>
         <p className="text-xs text-neutral-400 mt-1">
@@ -132,17 +132,17 @@ export default function CheckoutPage() {
       </div>
 
       {errorMessage && (
-        <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 text-xs flex items-center gap-3">
+        <div className="p-3.5 sm:p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 text-xs flex items-center gap-3">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmitOrder}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Shipping & Delivery Details */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/40 space-y-5">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/40 space-y-4 sm:space-y-5">
               <h2 className="text-sm font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
                 <Truck className="w-4 h-4" />
                 <span>1. {t.customerInformation}</span>

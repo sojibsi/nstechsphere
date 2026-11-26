@@ -133,25 +133,25 @@ export function ProductDetailsClient({
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 space-y-16">
+    <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 sm:py-8 space-y-10 sm:space-y-16">
       {/* Product Top Showcase */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14">
         {/* Gallery */}
-        <div className="space-y-4">
-          <div className="relative aspect-square w-full rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 overflow-hidden shadow-subtle group">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="relative aspect-square w-full rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 overflow-hidden shadow-subtle group">
             <img
               src={selectedImage}
               alt={product.name}
               className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
             />
             {hasDiscount && (
-              <span className="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-black tracking-wider uppercase shadow-md">
+              <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-0.5 sm:px-3.5 sm:py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[11px] sm:text-xs font-black tracking-wider uppercase shadow-md">
                 Save {discountPercent}%
               </span>
             )}
             <button
               onClick={handleShare}
-              className="absolute top-4 right-4 p-2.5 rounded-full liquid-glass border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 hover:text-foreground transition-all shadow-sm"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-2.5 rounded-full liquid-glass border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 hover:text-foreground transition-all shadow-sm"
               title="Share Device"
             >
               <Share2 className="w-4 h-4" />
@@ -160,12 +160,12 @@ export function ProductDetailsClient({
 
           {/* Thumbnails */}
           {product.images.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-2">
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 no-scrollbar">
               {product.images.map((img) => (
                 <button
                   key={img.id}
                   onClick={() => setSelectedImage(img.image_url)}
-                  className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all shrink-0 ${
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all shrink-0 ${
                     selectedImage === img.image_url
                       ? 'border-black dark:border-white shadow-md'
                       : 'border-neutral-200 dark:border-neutral-800 opacity-60 hover:opacity-100'
@@ -320,7 +320,7 @@ export function ProductDetailsClient({
           </div>
 
           {/* Trust Guarantees */}
-          <div className="grid grid-cols-3 gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-800 text-[11px] text-neutral-500">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-800 text-[11px] text-neutral-500">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-foreground shrink-0" />
               <span>{product.warranty || '1 Year Official Warranty'}</span>
@@ -339,34 +339,34 @@ export function ProductDetailsClient({
 
       {/* Sticky Bottom Action Bar on Scroll */}
       {showStickyBar && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 p-3 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-800 shadow-2xl animate-in slide-in-from-bottom duration-200">
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 min-w-0">
+        <div className="fixed bottom-0 left-0 right-0 z-40 p-2.5 sm:p-3 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-800 shadow-2xl animate-in slide-in-from-bottom duration-200">
+          <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 flex items-center justify-between gap-2.5 sm:gap-4">
+            <div className="flex items-center gap-2.5 min-w-0">
               <img
                 src={selectedImage}
                 alt=""
-                className="w-11 h-11 object-cover rounded-lg border border-neutral-200 dark:border-neutral-800 shrink-0"
+                className="w-9 h-9 sm:w-11 sm:h-11 object-cover rounded-lg border border-neutral-200 dark:border-neutral-800 shrink-0"
               />
-              <div className="min-w-0 hidden sm:block">
-                <div className="text-xs font-bold text-foreground truncate">{displayName}</div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-foreground truncate max-w-[110px] sm:max-w-xs">{displayName}</div>
                 <div className="text-[11px] font-extrabold text-foreground">
                   {formatPrice(currentPrice, settings.general.currency_symbol)}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => addToCart(product, quantity, selectedVariant)}
                 disabled={currentStock <= 0}
-                className="px-5 py-2.5 rounded-full border border-black dark:border-white text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-black dark:border-white text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
               >
                 {t.addToCart}
               </button>
               <button
                 onClick={handleBuyNow}
                 disabled={currentStock <= 0}
-                className="px-6 py-2.5 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-bold uppercase tracking-wider hover:opacity-90 shadow-md"
+                className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-bold uppercase tracking-wider hover:opacity-90 shadow-md"
               >
                 {t.buyNow}
               </button>
@@ -508,7 +508,7 @@ export function ProductDetailsClient({
       {relatedProducts.length > 0 && (
         <div className="pt-12 border-t border-neutral-200 dark:border-neutral-800 space-y-6">
           <h2 className="text-2xl font-extrabold text-foreground">{t.relatedProducts}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

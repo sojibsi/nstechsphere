@@ -24,17 +24,17 @@ export function BrandLogo({
   const logoUrl = settings?.general?.logo_url || '/images/ns-logo.jpg';
 
   const iconSizes = {
-    sm: 'w-8 h-8',
-    md: 'w-10 h-10 sm:w-11 sm:h-11',
-    lg: 'w-14 h-14',
-    xl: 'w-20 h-20',
+    sm: 'w-7 h-7 sm:w-8 sm:h-8',
+    md: 'w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11',
+    lg: 'w-12 h-12 sm:w-14 sm:h-14',
+    xl: 'w-16 h-16 sm:w-20 sm:h-20',
   };
 
   const textSizes = {
-    sm: 'text-sm font-extrabold',
-    md: 'text-base sm:text-lg font-black',
-    lg: 'text-xl sm:text-2xl font-black',
-    xl: 'text-2xl sm:text-3xl font-black',
+    sm: 'text-xs sm:text-sm font-extrabold',
+    md: 'text-sm sm:text-base md:text-lg font-black',
+    lg: 'text-lg sm:text-xl md:text-2xl font-black',
+    xl: 'text-xl sm:text-2xl md:text-3xl font-black',
   };
 
   return (
@@ -67,7 +67,7 @@ export function BrandLogo({
             </span>
           </div>
           {showTagline && (
-            <span className="text-[9px] sm:text-[10px] tracking-wider text-neutral-500 dark:text-neutral-400 font-medium truncate mt-0.5">
+            <span className="hidden sm:block text-[9px] sm:text-[10px] tracking-wider text-neutral-500 dark:text-neutral-400 font-medium truncate mt-0.5">
               {tagline}
             </span>
           )}

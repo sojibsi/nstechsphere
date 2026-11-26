@@ -32,9 +32,9 @@ export default function CartPage() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 space-y-8">
+    <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 sm:py-8 space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
           {t.shoppingCart}
         </h1>
         <p className="text-xs text-neutral-400 mt-1">
@@ -43,9 +43,9 @@ export default function CartPage() {
       </div>
 
       {cart.items.length === 0 ? (
-        <div className="py-24 text-center rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/40 p-8 space-y-4">
-          <ShoppingBag className="w-16 h-16 text-neutral-300 dark:text-neutral-700 mx-auto stroke-1" />
-          <h2 className="text-lg font-bold text-foreground">{t.cartEmpty}</h2>
+        <div className="py-20 sm:py-24 text-center rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/40 p-6 sm:p-8 space-y-4">
+          <ShoppingBag className="w-12 h-12 sm:w-16 sm:h-16 text-neutral-300 dark:text-neutral-700 mx-auto stroke-1" />
+          <h2 className="text-base sm:text-lg font-bold text-foreground">{t.cartEmpty}</h2>
           <p className="text-xs text-neutral-400 max-w-sm mx-auto">
             Explore our curated flagship smartphones, noise-cancelling headphones, and smart devices.
           </p>
@@ -57,18 +57,18 @@ export default function CartPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Cart Items List */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4">
             {cart.items.map((item) => {
               const displayName =
                 language === 'bn' ? item.product.name_bn || item.product.name : item.product.name;
               return (
                 <div
                   key={item.id}
-                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/60 gap-4"
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 sm:p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/60 gap-3 sm:gap-4"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <img
                       src={
                         item.variant?.image_url ||
@@ -76,7 +76,7 @@ export default function CartPage() {
                         '/placeholder.png'
                       }
                       alt={item.product.name}
-                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl border border-neutral-200 dark:border-neutral-800 shrink-0"
+                      className="w-14 h-14 sm:w-20 sm:h-20 object-cover rounded-xl border border-neutral-200 dark:border-neutral-800 shrink-0"
                     />
                     <div>
                       <span className="text-[10px] font-mono uppercase text-neutral-400 font-semibold">
@@ -88,13 +88,13 @@ export default function CartPage() {
                       {item.variant && (
                         <p className="text-xs text-neutral-500 mt-0.5">{item.variant.name}</p>
                       )}
-                      <div className="text-xs font-bold text-foreground mt-1 sm:hidden">
+                      <div className="text-xs font-bold text-foreground mt-0.5 sm:hidden">
                         {formatPrice(item.unitPrice, settings.general.currency_symbol)}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between w-full sm:w-auto gap-6">
+                  <div className="flex items-center justify-between w-full sm:w-auto gap-3 sm:gap-6 pt-2 sm:pt-0 border-t border-neutral-100 dark:border-neutral-900 sm:border-0">
                     <div className="hidden sm:block text-right">
                       <div className="text-xs font-bold text-foreground">
                         {formatPrice(item.unitPrice, settings.general.currency_symbol)}
@@ -106,23 +106,23 @@ export default function CartPage() {
                     <div className="flex items-center border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden bg-background">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="px-2.5 py-1 text-xs text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                        className="px-2 sm:px-2.5 py-1 text-xs text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="px-3 py-1 text-xs font-bold min-w-[28px] text-center">
+                      <span className="px-2.5 sm:px-3 py-1 text-xs font-bold min-w-[24px] sm:min-w-[28px] text-center">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="px-2.5 py-1 text-xs text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                        className="px-2 sm:px-2.5 py-1 text-xs text-neutral-500 hover:text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
-                    <div className="text-right min-w-[80px]">
-                      <div className="text-sm font-black text-foreground">
+                    <div className="text-right min-w-[70px] sm:min-w-[80px]">
+                      <div className="text-xs sm:text-sm font-black text-foreground">
                         {formatPrice(item.totalPrice, settings.general.currency_symbol)}
                       </div>
                     </div>
@@ -141,7 +141,7 @@ export default function CartPage() {
 
           {/* Cart Summary & Delivery Zone */}
           <div className="space-y-6">
-            <div className="p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950/60 space-y-4">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950/60 space-y-4">
               <h3 className="text-sm font-bold uppercase tracking-wider text-foreground pb-2 border-b border-neutral-200 dark:border-neutral-800">
                 Order Summary
               </h3>

@@ -23,7 +23,7 @@ export default function HomePage() {
       <CategoryGrid categories={categories} />
 
       {/* 3. Featured Flagships */}
-      <section className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <section className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="flex items-end justify-between mb-3">
           <div>
             <div className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-0.5">
@@ -42,7 +42,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-4 md:gap-5">
           {featured.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -50,7 +50,7 @@ export default function HomePage() {
       </section>
 
       {/* 4. New Arrivals */}
-      <section className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <section className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="flex items-end justify-between mb-3">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">
@@ -69,7 +69,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-4 md:gap-5">
           {newArrivals.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -80,7 +80,7 @@ export default function HomePage() {
       <BrandShowcase brands={brands} />
 
       {/* 6. Promotional BDT Savings Banner */}
-      <section className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <section className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="rounded-2xl p-5 sm:p-7 border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="text-lg sm:text-xl md:text-2xl font-black text-foreground">

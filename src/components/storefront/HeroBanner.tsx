@@ -53,17 +53,17 @@ export function HeroBanner() {
                 : 'Discover innovative electronics, smart gadgets, and everyday technology essentials at NS TechSphere. Genuine warranty with fast nationwide cash on delivery.'}
             </p>
 
-            <div className="pt-2 flex flex-wrap items-center gap-3.5">
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full liquid-glass-primary text-sm font-bold uppercase tracking-wider group"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full liquid-glass-primary text-sm font-bold uppercase tracking-wider group"
               >
                 <span>{language === 'bn' ? 'শপ করুন এখনই' : 'Shop Now'}</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/products#categories"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full liquid-glass-btn text-foreground text-sm font-bold uppercase tracking-wider"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full liquid-glass-btn text-foreground text-sm font-bold uppercase tracking-wider"
               >
                 <span>{language === 'bn' ? 'ক্যাটাগরি দেখুন' : 'Explore Categories'}</span>
               </Link>

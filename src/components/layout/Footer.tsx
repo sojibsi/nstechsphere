@@ -11,9 +11,9 @@ export function Footer() {
 
   return (
     <footer className="w-full border-t border-neutral-800 bg-[#121316] text-neutral-200 pt-7 pb-8">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         {/* Value Proposition Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pb-6 border-b border-neutral-800/80">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pb-6 border-b border-neutral-800/80">
           <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-neutral-800/80 bg-neutral-900/70 backdrop-blur-md">
             <ShieldCheck className="w-6 h-6 text-white shrink-0 stroke-2" />
             <div>
@@ -45,7 +45,7 @@ export function Footer() {
         </div>
 
         {/* Links & Brand Info */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 py-6">
           <div className="space-y-3">
             <BrandLogo size="md" />
             <p className="text-xs text-neutral-400 leading-relaxed pt-1">

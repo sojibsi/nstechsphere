@@ -21,14 +21,14 @@ export function BrandShowcase({ brands }: BrandShowcaseProps) {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2.5 sm:gap-4">
           {brands.map((brand) => (
             <Link
               key={brand.id}
               href={`/brand/${brand.slug}`}
-              className="flex items-center justify-center p-6 rounded-2xl liquid-glass hover:border-black dark:hover:border-white transition-smooth group shadow-subtle hover:shadow-glass"
+              className="flex items-center justify-center p-3.5 sm:p-6 rounded-2xl liquid-glass hover:border-black dark:hover:border-white transition-smooth group shadow-subtle hover:shadow-glass"
             >
-              <span className="font-extrabold text-sm md:text-base tracking-widest text-neutral-600 dark:text-neutral-400 group-hover:text-foreground transition-colors uppercase">
+              <span className="font-extrabold text-xs sm:text-sm md:text-base tracking-widest text-neutral-600 dark:text-neutral-400 group-hover:text-foreground transition-colors uppercase">
                 {brand.name}
               </span>
             </Link>
