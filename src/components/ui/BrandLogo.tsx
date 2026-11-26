@@ -10,6 +10,8 @@ interface BrandLogoProps {
   showTagline?: boolean;
   iconOnly?: boolean;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  isLightText?: boolean;
+  textColor?: string;
 }
 
 export function BrandLogo({
@@ -17,6 +19,8 @@ export function BrandLogo({
   showTagline = true,
   iconOnly = false,
   size = 'md',
+  isLightText = false,
+  textColor,
 }: BrandLogoProps) {
   const { settings } = useApp();
   const brandName = settings?.general?.brand_name || 'NS TechSphere';
@@ -61,13 +65,26 @@ export function BrandLogo({
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1">
             <span
-              className={`${textSizes[size]} tracking-tight leading-none text-foreground uppercase`}
+              className={`${textSizes[size]} tracking-tight leading-none uppercase ${
+                isLightText ? 'text-white' : textColor || 'text-foreground dark:text-white'
+              }`}
             >
-              NS <span className="text-foreground">TechSphere</span>
+              NS{' '}
+              <span
+                className={
+                  isLightText ? 'text-white' : textColor || 'text-foreground dark:text-white'
+                }
+              >
+                TechSphere
+              </span>
             </span>
           </div>
           {showTagline && (
-            <span className="hidden sm:block text-[9px] sm:text-[10px] tracking-wider text-neutral-500 dark:text-neutral-400 font-medium truncate mt-0.5">
+            <span
+              className={`hidden sm:block text-[9px] sm:text-[10px] tracking-wider font-medium truncate mt-0.5 ${
+                isLightText ? 'text-neutral-400' : 'text-neutral-500 dark:text-neutral-400'
+              }`}
+            >
               {tagline}
             </span>
           )}

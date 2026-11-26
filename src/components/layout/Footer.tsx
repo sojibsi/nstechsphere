@@ -47,7 +47,7 @@ export function Footer() {
         {/* Links & Brand Info */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 py-6">
           <div className="space-y-3">
-            <BrandLogo size="md" />
+            <BrandLogo size="md" isLightText={true} />
             <p className="text-xs text-neutral-400 leading-relaxed pt-1">
               {settings.general.tagline || 'Explore the World of Technology.'}
             </p>
